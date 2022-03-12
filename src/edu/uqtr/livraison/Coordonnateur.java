@@ -3,7 +3,7 @@ package edu.uqtr.livraison;
 /**
  * Employé de l'entreprise en charge de la coordination.
  */
-public class Coordonnateur {
+public class Coordonnateur implements IObservateurCommande {
 
     /**
      * Nom du coordonnateur
@@ -16,6 +16,11 @@ public class Coordonnateur {
      */
     public Coordonnateur(String nom) {
         this.nom = nom;
+    }
+
+    @Override
+    public void onAssignationCommande(Commande commande) {
+        notifierLivraison(commande);
     }
 
     /**

@@ -3,7 +3,7 @@ package edu.uqtr.livraison;
 /**
  * Client de l'entreprise Truck Norris
  */
-public class Client {
+public class Client implements IObservateurCommande {
 
     /**
      * Nom du client
@@ -18,6 +18,13 @@ public class Client {
         this.nom = nom;
     }
 
+    @Override
+    public void onAssignationCommande(Commande commande){
+        // On envoit la notification seulement si le client est concerné par cette livraison.
+        if(commande.getDestinataire().equals(this) || commande.getExpediteur().equals(this))
+            notifierLivraison(commande);
+    }
+
     /**
      * Envoie une notification au coordonnateur que l'état d'une commande a changé.
      * @param commande la commande dont l'état a changé.
@@ -30,5 +37,14 @@ public class Client {
     @Override
     public String toString() {
         return nom;
+    }
+
+    @Override
+    public boolean equals(Object autre) {
+        if(autre instanceof Client) {
+            return nom.equals(((Client) autre).nom);
+        }
+
+        return super.equals(autre);
     }
 }

@@ -1,11 +1,17 @@
 package edu.uqtr.livraison;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Liste des commandes de l'entreprise.
  */
 public class CarnetCommandes {
+
+    /**
+     * Liste des observateurs de commandes
+     */
+    private ArrayList<IObservateurCommande> observateursCommande;
 
     /**
      * Numéro séquentiel de commandes
@@ -23,6 +29,39 @@ public class CarnetCommandes {
     public CarnetCommandes() {
         compteurCommande = 1;
         commandes = new ArrayList<>();
+        observateursCommande = new ArrayList<>();
+    }
+
+    /**
+     * Ajoute un nouvel observateur d'état de commande
+     * @param observateur
+     */
+    public void ajouterObservateurCommande(IObservateurCommande observateur){
+        // Évite les ajout en double.
+        if(!observateursCommande.contains(observateur)) {
+            observateursCommande.add(observateur);
+        }
+    }
+
+    /**
+     * Retire un des observateurs d'état de commande
+     * @param observateur
+     */
+    public void retirerObservateurCommande(IObservateurCommande observateur) {
+        // Évite le déclenchement d'une exception si l'objet n'est pas dans la liste.
+        if(!observateursCommande.contains(observateur)) {
+            observateursCommande.remove(observateur);
+        }
+    }
+
+    /**
+     * Notifie les observateurs d'un changement
+     * @param commande
+     */
+    private void notifier(Commande commande){
+        for(IObservateurCommande obs : observateursCommande) {
+            obs.onAssignationCommande(commande);
+        }
     }
 
     /**
@@ -48,9 +87,8 @@ public class CarnetCommandes {
      * Assigne une commande à un conducteur (la commande devient alors une livraison).
      * @param numeroCommande le numéro de la commande à assigner.
      * @param conducteur le conducteur à qui assigner la livraison.
-     * @param controleurLivraison le contrôleur de livraison. (Supprimez ce paramètre !)
      */
-    public void assignerLivraison(int numeroCommande, Conducteur conducteur, ControleurLivraison controleurLivraison) {
+    public void assignerLivraison(int numeroCommande, Conducteur conducteur) {
         Commande commandeLivree = null;
 
         for(Commande commande : commandes) {
@@ -65,17 +103,12 @@ public class CarnetCommandes {
 
         if(commandeLivree != null) {
             commandeLivree.setLivreur(conducteur);
-
-            /**
-             * Code à supprimer / réécrire !
-             */
-            controleurLivraison.notifierCoordonnateurs(commandeLivree);
-            commandeLivree.getExpediteur().notifierLivraison(commandeLivree);
-            commandeLivree.getDestinataire().notifierLivraison(commandeLivree);
-
+            notifier(commandeLivree);
         } else {
             System.err.println(String.format("Impossible d'assigner la commande #", numeroCommande));
         }
+
+
     }
 
 }

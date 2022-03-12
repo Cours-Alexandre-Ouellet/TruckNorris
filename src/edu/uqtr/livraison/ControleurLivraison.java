@@ -48,11 +48,17 @@ public class ControleurLivraison {
         }
     }
 
-
+    /**
+     * Ajoute les observateurs à la liste des commandes
+     */
     private void initialisation() {
-        /**
-         * Insérer vos opérations ici
-         */
+        for(Coordonnateur coordonnateur : coordonnateurs) {
+            carnetCommandes.ajouterObservateurCommande(coordonnateur);
+        }
+
+        for(Client client : clients) {
+            carnetCommandes.ajouterObservateurCommande(client);
+        }
     }
 
     /**
@@ -94,9 +100,9 @@ public class ControleurLivraison {
      */
     private void simuler() {
         // Aline livre la commande # 2
-        carnetCommandes.assignerLivraison(2, conducteurs[0], this);
+        carnetCommandes.assignerLivraison(2, conducteurs[0]);
 
         // Damien livre la commande #1
-        carnetCommandes.assignerLivraison(1, conducteurs[1], this);
+        carnetCommandes.assignerLivraison(1, conducteurs[1]);
     }
 }
