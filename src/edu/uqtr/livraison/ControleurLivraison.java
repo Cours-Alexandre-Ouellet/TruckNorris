@@ -1,15 +1,34 @@
 package edu.uqtr.livraison;
 
+/**
+ * Contrôleur de la livraison
+ */
 public class ControleurLivraison {
 
+    /**
+     * Carnet de commandes de l'entreprise
+     */
     private CarnetCommandes carnetCommandes;
 
+    /**
+     * Liste des clients
+     */
     private Client[] clients;
 
+    /**
+     * Liste des conducteurs
+     */
     private Conducteur[] conducteurs;
 
+    /**
+     * Liste des coordonnateurs
+     */
     private Coordonnateur[] coordonnateurs;
 
+    /**
+     * Point d'entrée du système.
+     * @param args
+     */
     public static void main(String args[]) {
         ControleurLivraison app = new ControleurLivraison();
         app.creerDonneesFictives();
@@ -19,11 +38,16 @@ public class ControleurLivraison {
         app.simuler();
     }
 
+    /**
+     * Informe tous les coordonnateurs de la livraison d'une commande.
+     * @param commande la commande dont l'état a changé.
+     */
     public void notifierCoordonnateurs(Commande commande) {
         for(Coordonnateur coordonnateur : coordonnateurs) {
             coordonnateur.notifierLivraison(commande);
         }
     }
+
 
     private void initialisation() {
         /**
@@ -31,6 +55,9 @@ public class ControleurLivraison {
          */
     }
 
+    /**
+     * Crée des données pour tester le système.
+     */
     private void creerDonneesFictives() {
         clients = new Client[]{
                 new Client("Export Rosemont"),
@@ -62,6 +89,9 @@ public class ControleurLivraison {
         };
     }
 
+    /**
+     * Simule l'assignation de livraison à des conducteurs
+     */
     private void simuler() {
         // Aline livre la commande # 2
         carnetCommandes.assignerLivraison(2, conducteurs[0], this);
