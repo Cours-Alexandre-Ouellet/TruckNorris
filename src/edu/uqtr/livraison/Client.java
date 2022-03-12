@@ -31,4 +31,13 @@ public class Client {
     public String toString() {
         return nom;
     }
+
+    @Override
+    public boolean equals(Object autre) {
+        if(autre instanceof Client) {
+            return nom.equals(((Client) autre).nom);
+        }
+
+        return super.equals(autre);
+    }
 }
